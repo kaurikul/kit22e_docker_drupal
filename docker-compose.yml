@@ -1,26 +1,38 @@
 version: '3.1'
 
 services:
-  apache:
-    # image: httpd:2.4
+  app:
     build:
       context: ./docker
-      dockerfile: apache.dockerfile
+      dockerfile: app.dockerfile
     ports:
       - 8000:80
+
+  # apache:
+  #   # image: httpd:2.4
+  #   build:
+  #     context: ./docker
+  #     dockerfile: apache.dockerfile
+  #   image: kasparsu/kit22learndocker:latest
+  #   ports:
+  #     - 8000:80
+    # volumes:
+    #   - ./html:/usr/local/apache2/htdocs
+
+  db:
+    image: mariadb
+    restart: always
+    environment:
+      MARIADB_ROOT_PASSWORD: example
+    ports:
+      - 3306:3306
     volumes:
-      - ./html:/usr/local/apache2/htdocs
+      - dbdata:/var/lib/mysql
 
-  # db:
-  #   image: mariadb
-  #   restart: always
-  #   environment:
-  #     MARIADB_ROOT_PASSWORD: example
-  #   ports:
-  #     - 3306:3306
-
-  # adminer:
-  #   image: adminer
-  #   restart: always
-  #   ports:
-  #     - 8080:8080
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+volumes:
+  dbdata:
