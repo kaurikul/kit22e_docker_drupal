@@ -1,38 +1,30 @@
-version: '3.1'
+version: '3'
 
 services:
-  app:
-    build:
-      context: ./docker
-      dockerfile: app.dockerfile
+  drupal:
+    image: drupal:latest
     ports:
-      - 8000:80
-
-  # apache:
-  #   # image: httpd:2.4
-  #   build:
-  #     context: ./docker
-  #     dockerfile: apache.dockerfile
-  #   image: kasparsu/kit22learndocker:latest
-  #   ports:
-  #     - 8000:80
-    # volumes:
-    #   - ./html:/usr/local/apache2/htdocs
+      - "8080:80"
+    depends_on:
+      - db
+    volumes:
+      - drupal-modules:/var/www/html/modules
+      - drupal-profiles:/var/www/html/profiles
+      - drupal-themes:/var/www/html/themes
+      - drupal-sites:/var/www/html/sites
 
   db:
-    image: mariadb
-    restart: always
+    image: postgres:latest
     environment:
-      MARIADB_ROOT_PASSWORD: example
-    ports:
-      - 3306:3306
+      POSTGRES_PASSWORD: password123
+      POSTGRES_USER: drupal
+      POSTGRES_DB: drupal
     volumes:
-      - dbdata:/var/lib/mysql
+      - db-data:/var/lib/postgresql/data
 
-  adminer:
-    image: adminer
-    restart: always
-    ports:
-      - 8080:8080
 volumes:
-  dbdata:
+  drupal-modules:
+  drupal-profiles:
+  drupal-themes:
+  drupal-sites:
+  db-data:
