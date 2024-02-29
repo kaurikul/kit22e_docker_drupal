@@ -2,7 +2,9 @@ version: '3'
 
 services:
   drupal:
-    image: drupal:latest
+    build:
+      context: ./docker
+      dockerfile: app.dockerfile
     ports:
       - "8080:80"
     depends_on:
@@ -16,7 +18,7 @@ services:
   db:
     image: postgres:latest
     environment:
-      POSTGRES_PASSWORD: password123
+      POSTGRES_PASSWORD: parool123
       POSTGRES_USER: drupal
       POSTGRES_DB: drupal
     volumes:
